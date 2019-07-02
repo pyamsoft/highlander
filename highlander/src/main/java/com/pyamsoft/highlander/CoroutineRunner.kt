@@ -28,8 +28,9 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * Adapted from https://gist.github.com/objcode/7ab4e7b1df8acd88696cb0ccecad16f7#file-concurrencyhelpers-kt-L91
  */
-internal class CoroutineRunner<T> internal constructor() {
+internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
 
+  private val logger = Logger(enabled = debug)
   private val activeTask = AtomicReference<Deferred<T>?>(null)
 
   suspend inline fun cancelAndRun(crossinline block: suspend () -> T): T {
@@ -52,9 +53,11 @@ internal class CoroutineRunner<T> internal constructor() {
           cancelRunning()
 
           // Yield thread control to other waiting coroutines
+          logger.log { "Waiting for current task to cancel so we can begin" }
           yield()
         } else {
           // We are the active task, start running
+          logger.log { "Begin new task" }
           result = newTask.await()
           break
         }
@@ -66,6 +69,9 @@ internal class CoroutineRunner<T> internal constructor() {
 
   private suspend fun cancelRunning() {
     activeTask.get()
-        ?.cancelAndJoin()
+        ?.let { task ->
+          logger.log { "Cancel running task" }
+          task.cancelAndJoin()
+        }
   }
 }

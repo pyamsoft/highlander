@@ -17,21 +17,13 @@
 
 package com.pyamsoft.highlander
 
-import androidx.annotation.CheckResult
+import timber.log.Timber
 
-/**
- * Internal
- *
- * Runs an upstream function only after guaranteeing that all previous upstreams are cancelled.
- */
-@PublishedApi
-internal class ActualHighlander<R> @PublishedApi internal constructor(debug: Boolean) {
+internal class Logger internal constructor(private val enabled: Boolean) {
 
-  private val runner = CoroutineRunner<R>(debug)
-
-  @CheckResult
-  suspend fun call(upstream: suspend () -> R): R {
-    return runner.cancelAndRun { upstream() }
+  inline fun log(func: () -> String) {
+    if (enabled) {
+      Timber.d(func())
+    }
   }
-
 }
