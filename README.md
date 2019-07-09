@@ -1,8 +1,8 @@
 # Highlander
 
-There can only be one.
+There can be only one.
 
-A coroutine powered runner which guarantees that the only one instance of a runner  
+A coroutine powered runner which guarantees that the only one instance of a runner
 function is active at any given time.
 
 ## Install
@@ -52,26 +52,26 @@ fun onButtonClicked () {
 }
 ```
 
-The highlander is coroutine safe and guarantees that your own runner logic  
-is completely cancelled before starting a new one. This avoids race conditions  
+The highlander is coroutine safe and guarantees that your own runner logic
+is completely cancelled before starting a new one. This avoids race conditions
 and avoids the requirement of a mutex.
 
 ## Development
 
-Highlander is developed in the Open on GitHub at:  
+Highlander is developed in the Open on GitHub at:
 ```
 https://github.com/pyamsoft/Highlander
 ```
-If you know a few things about Android programming and are wanting to help  
-out with development you can do so by creating issue tickets to squash bugs,  
+If you know a few things about Android programming and are wanting to help
+out with development you can do so by creating issue tickets to squash bugs,
 and propose feature requests for future inclusion.`
 
 # Issues or Questions
 
-Please post any issues with the code in the Issues section on GitHub. Pull Requests  
-will be accepted on GitHub only after extensive reading and as long as the request  
-goes in line with the design of the application. Pull Requests will only be  
-accepted for new features of the application, for general purpose bug fixes, creating  
+Please post any issues with the code in the Issues section on GitHub. Pull Requests
+will be accepted on GitHub only after extensive reading and as long as the request
+goes in line with the design of the application. Pull Requests will only be
+accepted for new features of the application, for general purpose bug fixes, creating
 an issue is simply faster.
 
 ## License
