@@ -32,8 +32,8 @@ internal class ActualHighlander<R> @PublishedApi internal constructor(debug: Boo
   private val runner = CoroutineRunner<R>(debug)
 
   @CheckResult
-  suspend fun call(upstream: suspend CoroutineScope.() -> R): R = coroutineScope {
-    return@coroutineScope runner.cancelAndRun { coroutineScope { upstream() } }
+  suspend fun call(upstream: suspend CoroutineScope.() -> R): R {
+    return runner.cancelAndRun { coroutineScope { upstream() } }
   }
 
 }
