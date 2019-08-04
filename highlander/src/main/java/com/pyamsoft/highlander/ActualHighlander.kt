@@ -18,6 +18,8 @@
 package com.pyamsoft.highlander
 
 import androidx.annotation.CheckResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 
 /**
  * Internal
@@ -30,8 +32,8 @@ internal class ActualHighlander<R> @PublishedApi internal constructor(debug: Boo
   private val runner = CoroutineRunner<R>(debug)
 
   @CheckResult
-  suspend fun call(upstream: suspend () -> R): R {
-    return runner.cancelAndRun { upstream() }
+  suspend fun call(upstream: suspend CoroutineScope.() -> R): R = coroutineScope {
+    return@coroutineScope runner.cancelAndRun { coroutineScope { upstream() } }
   }
 
 }
