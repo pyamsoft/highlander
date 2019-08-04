@@ -18,7 +18,6 @@
 package com.pyamsoft.highlander
 
 import androidx.annotation.CheckResult
-import kotlinx.coroutines.CoroutineScope
 
 /**
  * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
@@ -26,7 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 @JvmOverloads
 inline fun <reified R> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.() -> R
+  crossinline upstream: suspend () -> R
 ): Highlander<R> {
   return object : Highlander<R> {
 
@@ -45,7 +44,7 @@ inline fun <reified R> highlander(
 @JvmOverloads
 inline fun <reified R, reified T1> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.(T1) -> R
+  crossinline upstream: suspend (T1) -> R
 ): Highlander1<R, T1> {
   return object : Highlander1<R, T1> {
 
@@ -64,7 +63,7 @@ inline fun <reified R, reified T1> highlander(
 @JvmOverloads
 inline fun <reified R, reified T1, reified T2> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.(T1, T2) -> R
+  crossinline upstream: suspend (T1, T2) -> R
 ): Highlander2<R, T1, T2> {
   return object : Highlander2<R, T1, T2> {
 
@@ -86,7 +85,7 @@ inline fun <reified R, reified T1, reified T2> highlander(
 @JvmOverloads
 inline fun <reified R, reified T1, reified T2, reified T3> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.(T1, T2, T3) -> R
+  crossinline upstream: suspend (T1, T2, T3) -> R
 ): Highlander3<R, T1, T2, T3> {
   return object : Highlander3<R, T1, T2, T3> {
 
@@ -109,7 +108,7 @@ inline fun <reified R, reified T1, reified T2, reified T3> highlander(
 @JvmOverloads
 inline fun <reified R, reified T1, reified T2, reified T3, reified T4> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4) -> R
+  crossinline upstream: suspend (T1, T2, T3, T4) -> R
 ): Highlander4<R, T1, T2, T3, T4> {
   return object : Highlander4<R, T1, T2, T3, T4> {
 
@@ -133,7 +132,7 @@ inline fun <reified R, reified T1, reified T2, reified T3, reified T4> highlande
 @JvmOverloads
 inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T5> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5) -> R
+  crossinline upstream: suspend (T1, T2, T3, T4, T5) -> R
 ): Highlander5<R, T1, T2, T3, T4, T5> {
   return object : Highlander5<R, T1, T2, T3, T4, T5> {
 
@@ -158,7 +157,7 @@ inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T
 @JvmOverloads
 inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T5, reified T6> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6) -> R
+  crossinline upstream: suspend (T1, T2, T3, T4, T5, T6) -> R
 ): Highlander6<R, T1, T2, T3, T4, T5, T6> {
   return object : Highlander6<R, T1, T2, T3, T4, T5, T6> {
 
@@ -184,7 +183,7 @@ inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T
 @JvmOverloads
 inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T5, reified T6, reified T7> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7) -> R
+  crossinline upstream: suspend (T1, T2, T3, T4, T5, T6, T7) -> R
 ): Highlander7<R, T1, T2, T3, T4, T5, T6, T7> {
   return object : Highlander7<R, T1, T2, T3, T4, T5, T6, T7> {
 
@@ -211,7 +210,7 @@ inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T
 @JvmOverloads
 inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T5, reified T6, reified T7, reified T8> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8) -> R
+  crossinline upstream: suspend (T1, T2, T3, T4, T5, T6, T7, T8) -> R
 ): Highlander8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
   return object : Highlander8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
 
@@ -239,7 +238,7 @@ inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T
 @JvmOverloads
 inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T5, reified T6, reified T7, reified T8, reified T9> highlander(
   debug: Boolean = false,
-  crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R
+  crossinline upstream: suspend (T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R
 ): Highlander9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
   return object : Highlander9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
 
