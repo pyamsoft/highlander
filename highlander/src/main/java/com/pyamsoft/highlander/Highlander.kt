@@ -262,22 +262,40 @@ inline fun <reified R, reified T1, reified T2, reified T3, reified T4, reified T
   }
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 0 parameters
+ */
 interface Highlander<R> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(): R
 
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 1 parameter
+ */
 interface Highlander1<R, T1> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(p1: T1): R
 
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 2 parameters
+ */
 interface Highlander2<R, T1, T2> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(
     p1: T1,
@@ -286,8 +304,14 @@ interface Highlander2<R, T1, T2> {
 
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 3 parameters
+ */
 interface Highlander3<R, T1, T2, T3> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(
     p1: T1,
@@ -297,8 +321,14 @@ interface Highlander3<R, T1, T2, T3> {
 
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 4 parameters
+ */
 interface Highlander4<R, T1, T2, T3, T4> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(
     p1: T1,
@@ -309,8 +339,14 @@ interface Highlander4<R, T1, T2, T3, T4> {
 
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 5 parameters
+ */
 interface Highlander5<R, T1, T2, T3, T4, T5> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(
     p1: T1,
@@ -322,8 +358,14 @@ interface Highlander5<R, T1, T2, T3, T4, T5> {
 
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 6 parameters
+ */
 interface Highlander6<R, T1, T2, T3, T4, T5, T6> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(
     p1: T1,
@@ -336,8 +378,14 @@ interface Highlander6<R, T1, T2, T3, T4, T5, T6> {
 
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 7 parameters
+ */
 interface Highlander7<R, T1, T2, T3, T4, T5, T6, T7> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(
     p1: T1,
@@ -351,8 +399,14 @@ interface Highlander7<R, T1, T2, T3, T4, T5, T6, T7> {
 
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 8 parameters
+ */
 interface Highlander8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(
     p1: T1,
@@ -367,8 +421,14 @@ interface Highlander8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
 
 }
 
+/**
+ * Function wrapper which guarantees only a single running function call at a time using 9 parameters
+ */
 interface Highlander9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
 
+  /**
+   * Run a function and guarantee it is only running a single time
+   */
   @CheckResult
   suspend fun call(
     p1: T1,
