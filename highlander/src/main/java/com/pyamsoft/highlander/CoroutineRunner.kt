@@ -30,48 +30,48 @@ import java.util.concurrent.atomic.AtomicReference
  */
 internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
 
-  private val logger = Logger(enabled = debug)
-  private val activeTask = AtomicReference<Deferred<T>?>(null)
+    private val logger = Logger(enabled = debug)
+    private val activeTask = AtomicReference<Deferred<T>?>(null)
 
-  suspend inline fun cancelAndRun(crossinline block: suspend () -> T): T {
-    // Cancel if already running.
-    cancelRunning()
+    suspend inline fun cancelAndRun(crossinline block: suspend () -> T): T {
+        // Cancel if already running.
+        cancelRunning()
 
-    return coroutineScope {
-      // Create a new coroutine, but don't start it until it's decided that this block should
-      // execute. In the code below, calling await() on newTask will cause this coroutine to
-      // start.
-      val newTask = async(start = CoroutineStart.LAZY) { block() }.apply {
-        invokeOnCompletion { activeTask.compareAndSet(this, null) }
-      }
+        return coroutineScope {
+            // Create a new coroutine, but don't start it until it's decided that this block should
+            // execute. In the code below, calling await() on newTask will cause this coroutine to
+            // start.
+            val newTask = async(start = CoroutineStart.LAZY) { block() }.apply {
+                invokeOnCompletion { activeTask.compareAndSet(this, null) }
+            }
 
-      val result: T
+            val result: T
 
-      // Loop until we can become the active task
-      while (true) {
-        if (!activeTask.compareAndSet(null, newTask)) {
-          cancelRunning()
+            // Loop until we can become the active task
+            while (true) {
+                if (!activeTask.compareAndSet(null, newTask)) {
+                    cancelRunning()
 
-          // Yield thread control to other waiting coroutines
-          logger.log { "Waiting for current task to cancel so we can begin" }
-          yield()
-        } else {
-          // We are the active task, start running
-          logger.log { "Begin new task" }
-          result = newTask.await()
-          break
+                    // Yield thread control to other waiting coroutines
+                    logger.log { "Waiting for current task to cancel so we can begin" }
+                    yield()
+                } else {
+                    // We are the active task, start running
+                    logger.log { "Begin new task" }
+                    result = newTask.await()
+                    break
+                }
+            }
+
+            return@coroutineScope result
         }
-      }
-
-      return@coroutineScope result
     }
-  }
 
-  private suspend fun cancelRunning() {
-    activeTask.get()
-        ?.let { task ->
-          logger.log { "Cancel running task" }
-          task.cancelAndJoin()
-        }
-  }
+    private suspend fun cancelRunning() {
+        activeTask.get()
+            ?.let { task ->
+                logger.log { "Cancel running task" }
+                task.cancelAndJoin()
+            }
+    }
 }

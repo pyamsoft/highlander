@@ -29,11 +29,10 @@ import kotlinx.coroutines.coroutineScope
 @PublishedApi
 internal class ActualHighlander<R> @PublishedApi internal constructor(debug: Boolean) {
 
-  private val runner = CoroutineRunner<R>(debug)
+    private val runner = CoroutineRunner<R>(debug)
 
-  @CheckResult
-  suspend fun call(upstream: suspend CoroutineScope.() -> R): R {
-    return runner.cancelAndRun { coroutineScope { upstream() } }
-  }
-
+    @CheckResult
+    suspend fun call(upstream: suspend CoroutineScope.() -> R): R {
+        return runner.cancelAndRun { coroutineScope { upstream() } }
+    }
 }
