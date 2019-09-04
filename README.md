@@ -2,8 +2,8 @@
 
 There can be only one.
 
-A coroutine powered runner which guarantees that the only one instance of a runner
-function is active at any given time.
+A coroutine powered runner which guarantees that the only one instance of a
+runner function is active at any given time.
 
 ## Install
 
@@ -58,7 +58,7 @@ and avoids the requirement of a mutex.
 
 ## Development
 
-Highlander is developed in the Open on GitHub at:
+Highlander is developed in the Open on GitHub at:  
 ```
 https://github.com/pyamsoft/Highlander
 ```
