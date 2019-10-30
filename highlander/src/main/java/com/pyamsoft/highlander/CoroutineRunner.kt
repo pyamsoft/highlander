@@ -41,9 +41,13 @@ internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
             // Create a new coroutine, but don't start it until it's decided that this block should
             // execute. In the code below, calling await() on newTask will cause this coroutine to
             // start.
-            val newTask = async(start = CoroutineStart.LAZY) { block() }.apply {
-                invokeOnCompletion { activeTask.compareAndSet(this, null) }
-            }
+            val newTask = async(start = CoroutineStart.LAZY) { block() }
+                newTask.invokeOnCompletion {
+                    logger.log { "Runner task completed" }
+                    if (activeTask.compareAndSet(newTask, null)) {
+                        logger.log { "Completed runner task cleared" }
+                    }
+                }
 
             val result: T
 
@@ -63,6 +67,7 @@ internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
                 }
             }
 
+            logger.log { "Returning result from task" }
             return@coroutineScope result
         }
     }
