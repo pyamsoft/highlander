@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="/storage/pyamsoft/devel/android/libraries/Highlander" />
-            <option value="/storage/pyamsoft/devel/android/libraries/Highlander/highlander" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/highlander" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
