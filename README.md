@@ -11,7 +11,7 @@ In your `build.gradle`
 
 ```gradle
 dependencies {
-  def latestVersion = "0.0.4"
+  def latestVersion = "0.0.6"
 
   implementation "com.pyamsoft.highlander:highlander:$latestVersion"
 }
@@ -58,7 +58,7 @@ and avoids the requirement of a mutex.
 
 ## Development
 
-Highlander is developed in the Open on GitHub at:  
+Highlander is developed in the Open on GitHub at:
 ```
 https://github.com/pyamsoft/Highlander
 ```
