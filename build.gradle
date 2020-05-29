@@ -103,6 +103,10 @@ subprojects {
             target "**/*.kt"
             ktlint()
         }
+        groovyGradle {
+            target "*.gradle", "**/*.gradle"
+            greclipse()
+        }
     }
 
     // Ignore non-release libraries
