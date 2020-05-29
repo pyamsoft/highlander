@@ -46,9 +46,6 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.0"
 
-        // Dex count
-        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6'
-
         // Gradle version checker
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.22.0'
 
@@ -70,7 +67,6 @@ buildscript {
 subprojects {
     apply plugin: 'com.android.library'
     apply plugin: 'kotlin-android'
-    apply plugin: "com.getkeepsafe.dexcount"
     apply plugin: 'com.github.dcendents.android-maven'
     apply plugin: 'com.github.ben-manes.versions'
     apply plugin: 'org.jetbrains.dokka-android'
@@ -79,7 +75,7 @@ subprojects {
     apply plugin: "com.diffplug.gradle.spotless"
 
     final String POM_GROUP = "com.pyamsoft.highlander"
-    final String POM_VERSION = "0.0.6"
+    final String POM_VERSION = "0.0.7-SNAPSHOT"
 
     group = POM_GROUP
     version = POM_VERSION
@@ -138,13 +134,6 @@ subprojects {
 
             // Only English, I don't have any translations
             resConfigs "en"
-
-            javaCompileOptions {
-                annotationProcessorOptions {
-                    // Fix kapt
-                    includeCompileClasspath = true
-                }
-            }
 
             compileOptions {
                 sourceCompatibility JavaVersion.VERSION_1_8
