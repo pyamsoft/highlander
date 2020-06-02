@@ -11,7 +11,7 @@ In your `build.gradle`
 
 ```gradle
 dependencies {
-  def latestVersion = "0.0.6"
+  def latestVersion = "0.0.7"
 
   implementation "com.pyamsoft.highlander:highlander:$latestVersion"
 }

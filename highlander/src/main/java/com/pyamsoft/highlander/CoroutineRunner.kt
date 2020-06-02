@@ -17,66 +17,89 @@
 
 package com.pyamsoft.highlander
 
-import java.util.concurrent.atomic.AtomicReference
+import androidx.annotation.CheckResult
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.yield
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import java.util.UUID
 
-/**
- * Adapted from https://gist.github.com/objcode/7ab4e7b1df8acd88696cb0ccecad16f7#file-concurrencyhelpers-kt-L91
- */
 internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
 
     private val logger = Logger(enabled = debug)
-    private val activeTask = AtomicReference<Deferred<T>?>(null)
+    private val mutex = Mutex()
+    private var activeTask: RunnerTask<T>? = null
 
-    suspend inline fun cancelAndRun(crossinline block: suspend () -> T): T {
+    suspend inline fun run(crossinline block: suspend CoroutineScope.() -> T): T = coroutineScope {
         // Cancel if already running.
-        cancelRunning()
+        mutex.withLock {
+            activeTask?.also { active ->
+                val id = active.id
+                val task = active.task
+                logger.log { "Cancel active task: $id" }
+                task.cancelAndJoin()
+            }
+        }
 
-        return coroutineScope {
-            // Create a new coroutine, but don't start it until it's decided that this block should
-            // execute. In the code below, calling await() on newTask will cause this coroutine to
-            // start.
-            val newTask = async(start = CoroutineStart.LAZY) { block() }
-                newTask.invokeOnCompletion {
-                    logger.log { "Runner task completed" }
-                    if (activeTask.compareAndSet(newTask, null)) {
-                        logger.log { "Completed runner task cleared" }
-                    }
-                }
+        // Create a new coroutine, but don't start it until it's decided that this block should
+        // execute. In the code below, calling await() on newTask will cause this coroutine to
+        // start.
+        val id = randomId()
+        val newTask = async(start = CoroutineStart.LAZY) {
+            logger.log { "Running task: $id" }
+            return@async block()
+        }
+        newTask.invokeOnCompletion { logger.log { "Completed task: $id" } }
 
-            val result: T
+        // Make sure we mark this task as the active task
+        mutex.withLock {
+            val current = activeTask
+            if (current == null || current.id != id) {
+                logger.log { "Marking task as active: $id" }
+                activeTask = RunnerTask(id, newTask)
+            } else {
+                val message = "New task is already active: $id"
+                logger.error { message }
+                throw IllegalStateException(message)
+            }
+        }
 
-            // Loop until we can become the active task
-            while (true) {
-                if (!activeTask.compareAndSet(null, newTask)) {
-                    cancelRunning()
-
-                    // Yield thread control to other waiting coroutines
-                    logger.log { "Waiting for current task to cancel so we can begin" }
-                    yield()
+        try {
+            // Await the completion of the task
+            val result = newTask.await()
+            logger.log { "Returning result from task[$id] $result" }
+            return@coroutineScope result
+        } finally {
+            // Once the task finishes for any reason, we clear it as it is no longer active
+            // It has either succeeded and returned, or encountered an error and thrown
+            mutex.withLock {
+                val current = activeTask
+                if (current != null && current.id == id) {
+                    logger.log { "Task finished, clearing: $id" }
+                    activeTask = null
                 } else {
-                    // We are the active task, start running
-                    logger.log { "Begin new task" }
-                    result = newTask.await()
-                    break
+                    val message = "Task finished but can't clear. Active: ${current?.id}, This: $id"
+                    logger.error { message }
+                    throw IllegalStateException(message)
                 }
             }
-
-            logger.log { "Returning result from task" }
-            return@coroutineScope result
         }
     }
 
-    private suspend fun cancelRunning() {
-        activeTask.get()
-            ?.let { task ->
-                logger.log { "Cancel running task" }
-                task.cancelAndJoin()
-            }
+    internal data class RunnerTask<T> internal constructor(
+        val id: String,
+        val task: Deferred<T>
+    )
+
+    companion object {
+
+        @CheckResult
+        private fun randomId(): String {
+            return UUID.randomUUID().toString()
+        }
     }
 }

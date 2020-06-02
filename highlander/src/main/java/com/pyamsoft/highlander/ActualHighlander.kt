@@ -19,20 +19,18 @@ package com.pyamsoft.highlander
 
 import androidx.annotation.CheckResult
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
 
 /**
  * Internal
  *
  * Runs an upstream function only after guaranteeing that all previous upstreams are cancelled.
  */
-@PublishedApi
-internal class ActualHighlander<R> @PublishedApi internal constructor(debug: Boolean) {
+internal class ActualHighlander<R> internal constructor(debug: Boolean) {
 
     private val runner = CoroutineRunner<R>(debug)
 
     @CheckResult
     suspend fun call(upstream: suspend CoroutineScope.() -> R): R {
-        return runner.cancelAndRun { coroutineScope { upstream() } }
+        return runner.run { upstream() }
     }
 }
