@@ -18,7 +18,6 @@
 package com.pyamsoft.highlander
 
 import androidx.annotation.CheckResult
-import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -27,6 +26,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.util.UUID
 
 internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
 
@@ -53,41 +53,17 @@ internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
             logger.log { "Running task: $id" }
             return@async block()
         }
-        newTask.invokeOnCompletion { logger.log { "Completed task: $id" } }
 
         // Make sure we mark this task as the active task
         mutex.withLock {
-            val current = activeTask
-            if (current == null || current.id != id) {
-                logger.log { "Marking task as active: $id" }
-                activeTask = RunnerTask(id, newTask)
-            } else {
-                val message = "New task is already active: $id"
-                logger.error { message }
-                throw IllegalStateException(message)
-            }
+            logger.log { "Marking task as active: $id" }
+            activeTask = RunnerTask(id, newTask)
         }
 
-        try {
-            // Await the completion of the task
-            val result = newTask.await()
-            logger.log { "Returning result from task[$id] $result" }
-            return@coroutineScope result
-        } finally {
-            // Once the task finishes for any reason, we clear it as it is no longer active
-            // It has either succeeded and returned, or encountered an error and thrown
-            mutex.withLock {
-                val current = activeTask
-                if (current != null && current.id == id) {
-                    logger.log { "Task finished, clearing: $id" }
-                    activeTask = null
-                } else {
-                    val message = "Task finished but can't clear. Active: ${current?.id}, This: $id"
-                    logger.error { message }
-                    throw IllegalStateException(message)
-                }
-            }
-        }
+        // Await the completion of the task
+        val result = newTask.await()
+        logger.log { "Returning result from task[$id] $result" }
+        return@coroutineScope result
     }
 
     internal data class RunnerTask<T> internal constructor(
