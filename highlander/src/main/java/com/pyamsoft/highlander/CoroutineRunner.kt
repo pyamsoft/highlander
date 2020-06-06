@@ -18,6 +18,7 @@
 package com.pyamsoft.highlander
 
 import androidx.annotation.CheckResult
+import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -26,7 +27,6 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.util.UUID
 
 internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
 
