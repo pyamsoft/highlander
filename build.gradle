@@ -73,7 +73,7 @@ subprojects {
 	apply plugin: 'com.jfrog.bintray'
 
 	final String POM_GROUP = "com.pyamsoft.highlander"
-	final String POM_VERSION = "0.0.9"
+	final String POM_VERSION = "0.0.10"
 
 	group = POM_GROUP
 	version = POM_VERSION

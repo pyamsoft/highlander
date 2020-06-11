@@ -22,11 +22,13 @@ import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 
 internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
 
@@ -35,9 +37,11 @@ internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
     private var activeTask: RunnerTask<T>? = null
 
     suspend inline fun run(crossinline block: suspend CoroutineScope.() -> T): T = coroutineScope {
-        // Cancel if already running.
+        // We must claim the mutex before checking task status because another task running in parallel
+        // could be changing the activeTask value
         mutex.withLock {
             activeTask?.also { active ->
+                // Cancel if already running.
                 val id = active.id
                 val task = active.task
                 logger.log { "Cancel active task: $id" }
@@ -61,9 +65,28 @@ internal class CoroutineRunner<T> internal constructor(debug: Boolean) {
         }
 
         // Await the completion of the task
-        val result = newTask.await()
-        logger.log { "Returning result from task[$id] $result" }
-        return@coroutineScope result
+        try {
+            val result = newTask.await()
+            logger.log { "Returning result from task[$id] $result" }
+            return@coroutineScope result
+        } finally {
+            // Make sure the activeTask is actually us, otherwise we don't need to do anything
+            // Fast path in this case only since we have the id to guard with as well as the state
+            // of activeTask
+            if (activeTask?.id == id) {
+                // Run in the NonCancellable context because the mutex must be claimed to free the activeTask
+                // or else we will leak memory.
+                withContext(context = NonCancellable) {
+                    mutex.withLock {
+                        // Check again to make sure we really are the active task
+                        if (activeTask?.id == id) {
+                            logger.log { "Releasing activeTask[$id] since it is complete" }
+                            activeTask = null
+                        }
+                    }
+                }
+            }
+        }
     }
 
     internal data class RunnerTask<T> internal constructor(
