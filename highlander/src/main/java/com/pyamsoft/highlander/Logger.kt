@@ -26,10 +26,4 @@ internal class Logger internal constructor(private val enabled: Boolean) {
             Timber.d(func())
         }
     }
-
-    inline fun error(func: () -> String) {
-        if (enabled) {
-            Timber.e(func())
-        }
-    }
 }
