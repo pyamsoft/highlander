@@ -23,7 +23,7 @@ internal class Logger internal constructor(private val debugTag: String) {
 
     inline fun log(func: () -> String) {
         if (Highlander.LOGGING_ENABLED || debugTag.isNotBlank()) {
-            val tag = "Highlander${if (debugTag.isNotBlank()) "[${debugTag}]" else ""}"
+            val tag = "Highlander${if (debugTag.isNotBlank()) "[$debugTag]" else ""}"
             Log.d(tag, func())
         }
     }

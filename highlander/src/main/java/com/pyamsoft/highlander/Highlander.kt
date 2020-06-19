@@ -17,12 +17,11 @@
 
 package com.pyamsoft.highlander
 
-object Highlander  {
+object Highlander {
 
     /**
      * Is logging globally enabled
      */
     @JvmField
     var LOGGING_ENABLED = false
-
 }
