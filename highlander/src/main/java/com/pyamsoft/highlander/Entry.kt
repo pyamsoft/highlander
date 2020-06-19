@@ -20,16 +20,16 @@ package com.pyamsoft.highlander
 import kotlinx.coroutines.CoroutineScope
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.() -> R
-): Highlander<R> {
-    return object : Highlander<R> {
+): Warrior<R> {
+    return object : Warrior<R> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(): R {
             return warrior.call { upstream() }
@@ -38,16 +38,16 @@ fun <R> highlander(
 }
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R, T1> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.(T1) -> R
-): Highlander1<R, T1> {
-    return object : Highlander1<R, T1> {
+): Warrior1<R, T1> {
+    return object : Warrior1<R, T1> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(p1: T1): R {
             return warrior.call { upstream(p1) }
@@ -56,16 +56,16 @@ fun <R, T1> highlander(
 }
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R, T1, T2> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.(T1, T2) -> R
-): Highlander2<R, T1, T2> {
-    return object : Highlander2<R, T1, T2> {
+): Warrior2<R, T1, T2> {
+    return object : Warrior2<R, T1, T2> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(
             p1: T1,
@@ -77,16 +77,16 @@ fun <R, T1, T2> highlander(
 }
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R, T1, T2, T3> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.(T1, T2, T3) -> R
-): Highlander3<R, T1, T2, T3> {
-    return object : Highlander3<R, T1, T2, T3> {
+): Warrior3<R, T1, T2, T3> {
+    return object : Warrior3<R, T1, T2, T3> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(
             p1: T1,
@@ -99,16 +99,16 @@ fun <R, T1, T2, T3> highlander(
 }
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R, T1, T2, T3, T4> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.(T1, T2, T3, T4) -> R
-): Highlander4<R, T1, T2, T3, T4> {
-    return object : Highlander4<R, T1, T2, T3, T4> {
+): Warrior4<R, T1, T2, T3, T4> {
+    return object : Warrior4<R, T1, T2, T3, T4> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(
             p1: T1,
@@ -122,16 +122,16 @@ fun <R, T1, T2, T3, T4> highlander(
 }
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R, T1, T2, T3, T4, T5> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5) -> R
-): Highlander5<R, T1, T2, T3, T4, T5> {
-    return object : Highlander5<R, T1, T2, T3, T4, T5> {
+): Warrior5<R, T1, T2, T3, T4, T5> {
+    return object : Warrior5<R, T1, T2, T3, T4, T5> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(
             p1: T1,
@@ -146,16 +146,16 @@ fun <R, T1, T2, T3, T4, T5> highlander(
 }
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R, T1, T2, T3, T4, T5, T6> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6) -> R
-): Highlander6<R, T1, T2, T3, T4, T5, T6> {
-    return object : Highlander6<R, T1, T2, T3, T4, T5, T6> {
+): Warrior6<R, T1, T2, T3, T4, T5, T6> {
+    return object : Warrior6<R, T1, T2, T3, T4, T5, T6> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(
             p1: T1,
@@ -171,16 +171,16 @@ fun <R, T1, T2, T3, T4, T5, T6> highlander(
 }
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R, T1, T2, T3, T4, T5, T6, T7> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7) -> R
-): Highlander7<R, T1, T2, T3, T4, T5, T6, T7> {
-    return object : Highlander7<R, T1, T2, T3, T4, T5, T6, T7> {
+): Warrior7<R, T1, T2, T3, T4, T5, T6, T7> {
+    return object : Warrior7<R, T1, T2, T3, T4, T5, T6, T7> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(
             p1: T1,
@@ -197,16 +197,16 @@ fun <R, T1, T2, T3, T4, T5, T6, T7> highlander(
 }
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R, T1, T2, T3, T4, T5, T6, T7, T8> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8) -> R
-): Highlander8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
-    return object : Highlander8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
+): Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
+    return object : Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(
             p1: T1,
@@ -224,16 +224,16 @@ fun <R, T1, T2, T3, T4, T5, T6, T7, T8> highlander(
 }
 
 /**
- * Wrapper which will generate a Highlander object that delegates its call() to the upstream source
+ * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
 fun <R, T1, T2, T3, T4, T5, T6, T7, T8, T9> highlander(
-    debug: Boolean = false,
+    debugTag: String = "",
     upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R
-): Highlander9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
-    return object : Highlander9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
+): Warrior9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
+    return object : Warrior9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
 
-        private val warrior = ActualHighlander<R>(debug)
+        private val warrior = ActualWarrior<R>(debugTag)
 
         override suspend fun call(
             p1: T1,

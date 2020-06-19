@@ -17,13 +17,14 @@
 
 package com.pyamsoft.highlander
 
-import timber.log.Timber
+import android.util.Log
 
-internal class Logger internal constructor(private val enabled: Boolean) {
+internal class Logger internal constructor(private val debugTag: String) {
 
     inline fun log(func: () -> String) {
-        if (enabled) {
-            Timber.d(func())
+        if (Highlander.LOGGING_ENABLED || debugTag.isNotBlank()) {
+            val tag = "Highlander${if (debugTag.isNotBlank()) "[${debugTag}]" else ""}"
+            Log.d(tag, func())
         }
     }
 }

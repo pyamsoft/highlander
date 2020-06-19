@@ -25,12 +25,14 @@ import kotlinx.coroutines.CoroutineScope
  *
  * Runs an upstream function only after guaranteeing that all previous upstreams are cancelled.
  */
-internal class ActualHighlander<R> internal constructor(debug: Boolean) {
+internal class ActualWarrior<R> internal constructor(debugTag: String) {
 
-    private val runner = CoroutineRunner<R>(debug)
+    private val logger = Logger(debugTag)
+    private val runner = HighRunner<R>(logger)
 
     @CheckResult
     suspend fun call(upstream: suspend CoroutineScope.() -> R): R {
+        logger.log { "Running call!" }
         return runner.run { upstream() }
     }
 }
