@@ -16,6 +16,9 @@
 
 package com.pyamsoft.highlander
 
+/**
+ * Global configuration object
+ */
 object Highlander {
 
     /**
