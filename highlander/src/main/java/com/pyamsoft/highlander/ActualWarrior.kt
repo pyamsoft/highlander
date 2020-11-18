@@ -18,6 +18,7 @@ package com.pyamsoft.highlander
 
 import androidx.annotation.CheckResult
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 
 /**
  * Internal
@@ -30,8 +31,8 @@ internal class ActualWarrior<R> internal constructor(debugTag: String) {
     private val runner = HighRunner<R>(logger)
 
     @CheckResult
-    suspend fun call(upstream: suspend CoroutineScope.() -> R): R {
+    suspend fun call(upstream: suspend CoroutineScope.() -> R): R = coroutineScope {
         logger.log { "Running call!" }
-        return runner.run { upstream() }
+        return@coroutineScope runner.run(this, upstream)
     }
 }
