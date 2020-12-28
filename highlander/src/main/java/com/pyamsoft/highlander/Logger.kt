@@ -21,16 +21,7 @@ import android.util.Log
 /**
  * Logger
  */
-@PublishedApi
-internal class Logger @PublishedApi internal constructor(
-    /**
-     * Log tag
-     *
-     * @private
-     */
-    @PublishedApi
-    internal val debugTag: String
-) {
+internal class Logger internal constructor(private val debugTag: String) {
 
     /**
      * Log a message if the logger is enabled
