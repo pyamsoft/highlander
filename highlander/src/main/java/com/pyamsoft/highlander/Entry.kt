@@ -22,9 +22,9 @@ import kotlinx.coroutines.CoroutineScope
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R> highlander(
+public inline fun <R> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.() -> R
+    crossinline upstream: suspend CoroutineScope.() -> R
 ): Warrior<R> {
     return object : Warrior<R> {
 
@@ -40,9 +40,9 @@ public fun <R> highlander(
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R, T1> highlander(
+public inline fun <R, T1> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.(T1) -> R
+    crossinline upstream: suspend CoroutineScope.(T1) -> R
 ): Warrior1<R, T1> {
     return object : Warrior1<R, T1> {
 
@@ -58,9 +58,9 @@ public fun <R, T1> highlander(
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R, T1, T2> highlander(
+public inline fun <R, T1, T2> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.(T1, T2) -> R
+    crossinline upstream: suspend CoroutineScope.(T1, T2) -> R
 ): Warrior2<R, T1, T2> {
     return object : Warrior2<R, T1, T2> {
 
@@ -79,9 +79,9 @@ public fun <R, T1, T2> highlander(
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R, T1, T2, T3> highlander(
+public inline fun <R, T1, T2, T3> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.(T1, T2, T3) -> R
+    crossinline upstream: suspend CoroutineScope.(T1, T2, T3) -> R
 ): Warrior3<R, T1, T2, T3> {
     return object : Warrior3<R, T1, T2, T3> {
 
@@ -101,9 +101,9 @@ public fun <R, T1, T2, T3> highlander(
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R, T1, T2, T3, T4> highlander(
+public inline fun <R, T1, T2, T3, T4> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.(T1, T2, T3, T4) -> R
+    crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4) -> R
 ): Warrior4<R, T1, T2, T3, T4> {
     return object : Warrior4<R, T1, T2, T3, T4> {
 
@@ -124,9 +124,9 @@ public fun <R, T1, T2, T3, T4> highlander(
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R, T1, T2, T3, T4, T5> highlander(
+public inline fun <R, T1, T2, T3, T4, T5> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5) -> R
+    crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5) -> R
 ): Warrior5<R, T1, T2, T3, T4, T5> {
     return object : Warrior5<R, T1, T2, T3, T4, T5> {
 
@@ -148,9 +148,9 @@ public fun <R, T1, T2, T3, T4, T5> highlander(
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R, T1, T2, T3, T4, T5, T6> highlander(
+public inline fun <R, T1, T2, T3, T4, T5, T6> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6) -> R
+    crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6) -> R
 ): Warrior6<R, T1, T2, T3, T4, T5, T6> {
     return object : Warrior6<R, T1, T2, T3, T4, T5, T6> {
 
@@ -173,9 +173,9 @@ public fun <R, T1, T2, T3, T4, T5, T6> highlander(
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R, T1, T2, T3, T4, T5, T6, T7> highlander(
+public inline fun <R, T1, T2, T3, T4, T5, T6, T7> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7) -> R
+    crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7) -> R
 ): Warrior7<R, T1, T2, T3, T4, T5, T6, T7> {
     return object : Warrior7<R, T1, T2, T3, T4, T5, T6, T7> {
 
@@ -199,9 +199,9 @@ public fun <R, T1, T2, T3, T4, T5, T6, T7> highlander(
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R, T1, T2, T3, T4, T5, T6, T7, T8> highlander(
+public inline fun <R, T1, T2, T3, T4, T5, T6, T7, T8> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8) -> R
+    crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8) -> R
 ): Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
     return object : Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
 
@@ -226,9 +226,9 @@ public fun <R, T1, T2, T3, T4, T5, T6, T7, T8> highlander(
  * Wrapper which will generate a Warrior object that delegates its call() to the upstream source
  */
 @JvmOverloads
-public fun <R, T1, T2, T3, T4, T5, T6, T7, T8, T9> highlander(
+public inline fun <R, T1, T2, T3, T4, T5, T6, T7, T8, T9> highlander(
     debugTag: String = "",
-    upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R
+    crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R
 ): Warrior9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
     return object : Warrior9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
 

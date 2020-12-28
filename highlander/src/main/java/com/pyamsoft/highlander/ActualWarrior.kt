@@ -17,7 +17,6 @@
 package com.pyamsoft.highlander
 
 import androidx.annotation.CheckResult
-import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -28,33 +27,47 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.util.UUID
 
 /**
  * Internal
  *
  * Runs an upstream function only after guaranteeing that all previous upstreams are cancelled.
  */
-internal class ActualWarrior<R> internal constructor(debugTag: String) {
+@PublishedApi
+internal class ActualWarrior<R> @PublishedApi internal constructor(debugTag: String) {
 
-    private val logger = Logger(debugTag)
+    /**
+     * Logger
+     *
+     * @private
+     */
+    @PublishedApi
+    internal val logger: Logger = Logger(debugTag)
 
-    private val mutex = Mutex()
-    private var activeRunner: Runner<R>? = null
+    /**
+     * Mutex
+     *
+     * @private
+     */
+    @PublishedApi
+    internal val mutex: Mutex = Mutex()
 
-    @CheckResult
-    suspend fun call(upstream: suspend CoroutineScope.() -> R): R = coroutineScope {
-        logger.log { "Running call!" }
-        cancelExistingTask()
-        val runner = createNewTask(this, upstream)
-        return@coroutineScope try {
-            runTask(runner)
-        } finally {
-            clearActiveTask(runner)
-        }
-    }
+    /**
+     * The current runner
+     *
+     * @private
+     */
+    @PublishedApi
+    internal var activeRunner: Runner<R>? = null
 
-    private suspend fun cancelTask(id: String, task: Deferred<R>) {
-        logger.log { "Cancel active task: $id" }
+    /**
+     * Cancel a task and log the id
+     *
+     * @private
+     */
+    @PublishedApi
+    internal suspend fun cancelTask(id: String, task: Deferred<R>) {
         task.cancelAndJoin()
         logger.log { "Previously active task cancelled: $id" }
     }
@@ -62,8 +75,11 @@ internal class ActualWarrior<R> internal constructor(debugTag: String) {
     /**
      * We must claim the mutex before checking task status because another task running in parallel
      * could be changing the activeTask value
+     *
+     * @private
      */
-    private suspend fun cancelExistingTask() = mutex.withLock {
+    @PublishedApi
+    internal suspend fun cancelExistingTask(): Unit = mutex.withLock {
         logger.log { "Checking for active task" }
         activeRunner?.also { active ->
             // Cancel if already running.
@@ -78,32 +94,37 @@ internal class ActualWarrior<R> internal constructor(debugTag: String) {
 
     /**
      * Claim the lock and look for who's the active runner
+     *
+     * @private
      */
-    private suspend inline fun createNewTask(
+    @CheckResult
+    @PublishedApi
+    internal suspend inline fun createNewTask(
         scope: CoroutineScope,
         crossinline block: suspend CoroutineScope.() -> R
-    ): Runner<R> =
-        mutex.withLock {
-            // In case anything has taken the active runner in between
-            val active = activeRunner
-            if (active != null) {
-                logger.log { "Found existing task: ${active.id}" }
-                cancelTask(active.id, active.task)
-            }
-
-            val currentId = randomId()
-            val newTask = scope.async(start = CoroutineStart.LAZY) { block() }
-            val newRunner = Runner(currentId, newTask)
-            activeRunner = newRunner
-            logger.log { "Marking task as active: $currentId" }
-            return@withLock newRunner
+    ): Runner<R> = mutex.withLock {
+        // In case anything has taken the active runner in between
+        val active = activeRunner
+        if (active != null) {
+            cancelTask(active.id, active.task)
         }
+
+        val currentId = randomId()
+        val newTask = scope.async(start = CoroutineStart.LAZY) { block() }
+        val newRunner = Runner(currentId, newTask)
+        activeRunner = newRunner
+        logger.log { "Marking task as active: $currentId" }
+        return@withLock newRunner
+    }
 
     /**
      * Await the completion of the task
+     *
+     * @private
      */
     @CheckResult
-    private suspend fun runTask(runner: Runner<R>): R {
+    @PublishedApi
+    internal suspend fun runTask(runner: Runner<R>): R {
         logger.log { "Awaiting task ${runner.id}" }
         runner.task.start()
         val result = runner.task.await()
@@ -115,8 +136,11 @@ internal class ActualWarrior<R> internal constructor(debugTag: String) {
      * Make sure the activeTask is actually us, otherwise we don't need to do anything
      * Fast path in this case only since we have the id to guard with as well as the state
      * of activeTask
+     *
+     * @private
      */
-    private suspend fun clearActiveTask(runner: Runner<R>) {
+    @PublishedApi
+    internal suspend fun clearActiveTask(runner: Runner<R>) {
         if (activeRunner?.id == runner.id) {
             // Run in the NonCancellable context because the mutex must be claimed to free the activeTask
             // or else we will leak memory.
@@ -132,13 +156,43 @@ internal class ActualWarrior<R> internal constructor(debugTag: String) {
         }
     }
 
-    private data class Runner<T>(val id: String, val task: Deferred<T>)
+    /**
+     * The main entry point for the Warrior
+     */
+    @CheckResult
+    suspend inline fun call(crossinline upstream: suspend CoroutineScope.() -> R): R =
+        coroutineScope {
+            cancelExistingTask()
+            val runner = createNewTask(this, upstream)
+            return@coroutineScope try {
+                runTask(runner)
+            } finally {
+                clearActiveTask(runner)
+            }
+        }
+
+    /**
+     * Runner is a keyed Deferred task
+     *
+     * @private
+     */
+    @PublishedApi
+    internal data class Runner<T> @PublishedApi internal constructor(
+        val id: String,
+        val task: Deferred<T>
+    )
 
     companion object {
 
+        /**
+         * Generate a new random UUID
+         *
+         * @private
+         */
         @JvmStatic
         @CheckResult
-        private fun randomId(): String {
+        @PublishedApi
+        internal fun randomId(): String {
             return UUID.randomUUID().toString()
         }
     }
