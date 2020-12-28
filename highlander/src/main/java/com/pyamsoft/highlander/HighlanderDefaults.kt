@@ -22,7 +22,7 @@ package com.pyamsoft.highlander
 /**
  * Global configuration object
  */
-public object Defaults {
+public object HighlanderDefaults {
 
     /**
      * Is logging globally enabled
