@@ -36,7 +36,7 @@ internal class Logger @PublishedApi internal constructor(
      * Log a message if the logger is enabled
      */
     inline fun log(func: () -> String) {
-        if (Highlander.LOGGING_ENABLED || debugTag.isNotBlank()) {
+        if (Defaults.LOGGING_ENABLED || debugTag.isNotBlank()) {
             val tag = "Highlander${if (debugTag.isNotBlank()) "[$debugTag]" else ""}"
             Log.d(tag, func())
         }

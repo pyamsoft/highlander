@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
+@file:JvmMultifileClass
+@file:JvmName("Highlander")
+
 package com.pyamsoft.highlander
 
 /**
  * Global configuration object
  */
-public object Highlander {
+public object Defaults {
 
     /**
      * Is logging globally enabled

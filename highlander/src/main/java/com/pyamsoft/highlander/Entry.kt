@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+@file:JvmMultifileClass
+@file:JvmName("Highlander")
+
 package com.pyamsoft.highlander
 
 import kotlinx.coroutines.CoroutineScope
