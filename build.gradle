@@ -74,7 +74,7 @@ subprojects {
   apply plugin: 'maven-publish'
 
   final String POM_GROUP = "com.github.pyamsoft"
-  final String POM_VERSION = "0.0.16"
+  final String POM_VERSION = "0.0.17"
 
   android {
     compileSdkVersion rootProject.ext.maxSdk
