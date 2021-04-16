@@ -13,7 +13,7 @@ In your `build.gradle`
 dependencies {
   def latestVersion = "0.0.12"
 
-  implementation "com.pyamsoft.highlander:highlander:$latestVersion"
+  implementation "com.github.pyamsoft.highlander:highlander:$latestVersion"
 }
 ```
 
