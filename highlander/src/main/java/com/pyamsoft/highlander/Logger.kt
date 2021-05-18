@@ -18,18 +18,14 @@ package com.pyamsoft.highlander
 
 import android.util.Log
 
-/**
- * Logger
- */
+/** Logger */
 internal class Logger internal constructor(private val debugTag: String) {
 
-    /**
-     * Log a message if the logger is enabled
-     */
-    inline fun log(func: () -> String) {
-        if (HighlanderDefaults.LOGGING_ENABLED || debugTag.isNotBlank()) {
-            val tag = "Highlander${if (debugTag.isNotBlank()) "[$debugTag]" else ""}"
-            Log.d(tag, func())
-        }
+  /** Log a message if the logger is enabled */
+  inline fun log(func: () -> String) {
+    if (HighlanderDefaults.LOGGING_ENABLED || debugTag.isNotBlank()) {
+      val tag = "Highlander${if (debugTag.isNotBlank()) "[$debugTag]" else ""}"
+      Log.d(tag, func())
     }
+  }
 }

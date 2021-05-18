@@ -36,48 +36,46 @@ import kotlinx.coroutines.withContext
  */
 internal class Connor<R> internal constructor(debugTag: String) : ActualWarrior<R> {
 
-    private val logger: Logger = Logger(debugTag)
-    private val mutex: Mutex = Mutex()
+  private val logger: Logger = Logger(debugTag)
+  private val mutex: Mutex = Mutex()
 
-    private var activeRunner: Runner<R>? = null
+  private var activeRunner: Runner<R>? = null
 
-    /**
-     * Cancel a task and log the id
-     */
-    private suspend fun cancelTask(id: String, task: Deferred<R>) {
-        task.cancelAndJoin()
-        logger.log { "Previously active task cancelled: $id" }
-    }
+  /** Cancel a task and log the id */
+  private suspend fun cancelTask(id: String, task: Deferred<R>) {
+    task.cancelAndJoin()
+    logger.log { "Previously active task cancelled: $id" }
+  }
 
-    /**
-     * We must claim the mutex before checking task status because another task running in parallel
-     * could be changing the activeTask value
-     */
-    private suspend fun cancelExistingTask(): Unit = mutex.withLock {
+  /**
+   * We must claim the mutex before checking task status because another task running in parallel
+   * could be changing the activeTask value
+   */
+  private suspend fun cancelExistingTask(): Unit =
+      mutex.withLock {
         logger.log { "Checking for active task" }
         activeRunner?.also { active ->
-            // Cancel if already running.
-            val id = active.id
-            val task = active.task
-            cancelTask(id, task)
+          // Cancel if already running.
+          val id = active.id
+          val task = active.task
+          cancelTask(id, task)
         }
 
         // Unset the active runner once we have cancelled any held task
         activeRunner = null
-    }
+      }
 
-    /**
-     * Claim the lock and look for who's the active runner
-     */
-    @CheckResult
-    private suspend inline fun createNewTask(
-        scope: CoroutineScope,
-        crossinline block: suspend CoroutineScope.() -> R
-    ): Runner<R> = mutex.withLock {
+  /** Claim the lock and look for who's the active runner */
+  @CheckResult
+  private suspend inline fun createNewTask(
+      scope: CoroutineScope,
+      crossinline block: suspend CoroutineScope.() -> R
+  ): Runner<R> =
+      mutex.withLock {
         // In case anything has taken the active runner in between
         val active = activeRunner
         if (active != null) {
-            cancelTask(active.id, active.task)
+          cancelTask(active.id, active.task)
         }
 
         val currentId = randomId()
@@ -86,71 +84,64 @@ internal class Connor<R> internal constructor(debugTag: String) : ActualWarrior<
         activeRunner = newRunner
         logger.log { "Marking task as active: $currentId" }
         return@withLock newRunner
+      }
+
+  /** Await the completion of the task */
+  @CheckResult
+  private suspend fun runTask(runner: Runner<R>): R {
+    logger.log { "Awaiting task ${runner.id}" }
+    runner.task.start()
+    val result = runner.task.await()
+    logger.log { "Completed task ${runner.id}" }
+    return result
+  }
+
+  /**
+   * Make sure the activeTask is actually us, otherwise we don't need to do anything Fast path in
+   * this case only since we have the id to guard with as well as the state of activeTask
+   */
+  private suspend fun clearActiveTask(runner: Runner<R>) {
+    if (activeRunner?.id == runner.id) {
+      // Run in the NonCancellable context because the mutex must be claimed to free the activeTask
+      // or else we will leak memory.
+      withContext(context = NonCancellable) {
+        mutex.withLock {
+          // Check again to make sure we really are the active task
+          if (activeRunner?.id == runner.id) {
+            logger.log { "Releasing activeTask ${runner.id} since it is complete" }
+            activeRunner = null
+          }
+        }
+      }
     }
+  }
+
+  /** The main entry point for the Warrior */
+  @CheckResult
+  override suspend fun call(upstream: suspend CoroutineScope.() -> R): R = coroutineScope {
+    cancelExistingTask()
+    val runner = createNewTask(this, upstream)
+    return@coroutineScope try {
+      runTask(runner)
+    } finally {
+      clearActiveTask(runner)
+    }
+  }
+
+  /** Runner is a keyed Deferred task */
+  private data class Runner<T>(val id: String, val task: Deferred<T>)
+
+  companion object {
 
     /**
-     * Await the completion of the task
+     * Generate a new random UUID
+     *
+     * @private
      */
+    @JvmStatic
     @CheckResult
-    private suspend fun runTask(runner: Runner<R>): R {
-        logger.log { "Awaiting task ${runner.id}" }
-        runner.task.start()
-        val result = runner.task.await()
-        logger.log { "Completed task ${runner.id}" }
-        return result
+    private fun randomId(): String {
+      return UUID.randomUUID().toString()
     }
-
-    /**
-     * Make sure the activeTask is actually us, otherwise we don't need to do anything
-     * Fast path in this case only since we have the id to guard with as well as the state
-     * of activeTask
-     */
-    private suspend fun clearActiveTask(runner: Runner<R>) {
-        if (activeRunner?.id == runner.id) {
-            // Run in the NonCancellable context because the mutex must be claimed to free the activeTask
-            // or else we will leak memory.
-            withContext(context = NonCancellable) {
-                mutex.withLock {
-                    // Check again to make sure we really are the active task
-                    if (activeRunner?.id == runner.id) {
-                        logger.log { "Releasing activeTask ${runner.id} since it is complete" }
-                        activeRunner = null
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * The main entry point for the Warrior
-     */
-    @CheckResult
-    override suspend fun call(upstream: suspend CoroutineScope.() -> R): R = coroutineScope {
-        cancelExistingTask()
-        val runner = createNewTask(this, upstream)
-        return@coroutineScope try {
-            runTask(runner)
-        } finally {
-            clearActiveTask(runner)
-        }
-    }
-
-    /**
-     * Runner is a keyed Deferred task
-     */
-    private data class Runner<T>(val id: String, val task: Deferred<T>)
-
-    companion object {
-
-        /**
-         * Generate a new random UUID
-         *
-         * @private
-         */
-        @JvmStatic
-        @CheckResult
-        private fun randomId(): String {
-            return UUID.randomUUID().toString()
-        }
-    }
+  }
 }

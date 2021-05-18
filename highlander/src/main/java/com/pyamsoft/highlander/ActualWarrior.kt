@@ -26,20 +26,15 @@ import kotlinx.coroutines.CoroutineScope
  */
 public interface ActualWarrior<R> {
 
-    /**
-     * The main entry point for the Warrior
-     */
-    @CheckResult
-    public suspend fun call(upstream: suspend CoroutineScope.() -> R): R
+  /** The main entry point for the Warrior */
+  @CheckResult public suspend fun call(upstream: suspend CoroutineScope.() -> R): R
 
-    public companion object {
-        /**
-         * Create a new ActualWarrior
-         */
-        @CheckResult
-        @PublishedApi
-        internal fun <R> create(debugTag: String): ActualWarrior<R> {
-            return Connor(debugTag)
-        }
+  public companion object {
+    /** Create a new ActualWarrior */
+    @CheckResult
+    @PublishedApi
+    internal fun <R> create(debugTag: String): ActualWarrior<R> {
+      return Connor(debugTag)
     }
+  }
 }
