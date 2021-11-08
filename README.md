@@ -10,6 +10,16 @@ runner function is active at any given time.
 In your `build.gradle`
 
 ```gradle
+repositories {
+
+  maven {
+    url 'https://jitpack.io'
+    content {
+      includeGroup("com.github.pyamsoft")
+    }
+  }
+}
+
 dependencies {
   def latestVersion = "0.0.18"
 
