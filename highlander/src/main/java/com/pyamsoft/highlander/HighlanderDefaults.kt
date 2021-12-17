@@ -29,5 +29,5 @@ public object HighlanderDefaults {
   @JvmField public var LOGGING_ENABLED: Boolean = false
 
   /** The global default coroutine context for Highlander operations */
-  public var DEFAULT_COROUTINE_CONTEXT: CoroutineContext = EmptyCoroutineContext
+  @JvmField public var DEFAULT_COROUTINE_CONTEXT: CoroutineContext = EmptyCoroutineContext
 }

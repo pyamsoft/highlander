@@ -51,10 +51,9 @@ public final class com/pyamsoft/highlander/Highlander {
 }
 
 public final class com/pyamsoft/highlander/HighlanderDefaults {
+	public static field DEFAULT_COROUTINE_CONTEXT Lkotlin/coroutines/CoroutineContext;
 	public static final field INSTANCE Lcom/pyamsoft/highlander/HighlanderDefaults;
 	public static field LOGGING_ENABLED Z
-	public final fun getDEFAULT_COROUTINE_CONTEXT ()Lkotlin/coroutines/CoroutineContext;
-	public final fun setDEFAULT_COROUTINE_CONTEXT (Lkotlin/coroutines/CoroutineContext;)V
 }
 
 public abstract interface class com/pyamsoft/highlander/Warrior {

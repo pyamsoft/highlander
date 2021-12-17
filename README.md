@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-  def latestVersion = "0.0.20"
+  def latestVersion = "0.0.21"
 
   implementation "com.github.pyamsoft:highlander:$latestVersion"
 }
