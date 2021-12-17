@@ -1,0 +1,99 @@
+public abstract interface class com/pyamsoft/highlander/ActualWarrior {
+	public static final field Companion Lcom/pyamsoft/highlander/ActualWarrior$Companion;
+	public abstract fun call (Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/pyamsoft/highlander/ActualWarrior$Companion {
+	public final fun create (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;)Lcom/pyamsoft/highlander/ActualWarrior;
+}
+
+public final class com/pyamsoft/highlander/Highlander {
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function10;)Lcom/pyamsoft/highlander/Warrior8;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function11;)Lcom/pyamsoft/highlander/Warrior9;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lcom/pyamsoft/highlander/Warrior;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function3;)Lcom/pyamsoft/highlander/Warrior1;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function4;)Lcom/pyamsoft/highlander/Warrior2;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function5;)Lcom/pyamsoft/highlander/Warrior3;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function6;)Lcom/pyamsoft/highlander/Warrior4;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function7;)Lcom/pyamsoft/highlander/Warrior5;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function8;)Lcom/pyamsoft/highlander/Warrior6;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function9;)Lcom/pyamsoft/highlander/Warrior7;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function10;)Lcom/pyamsoft/highlander/Warrior8;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function11;)Lcom/pyamsoft/highlander/Warrior9;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function2;)Lcom/pyamsoft/highlander/Warrior;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function3;)Lcom/pyamsoft/highlander/Warrior1;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function4;)Lcom/pyamsoft/highlander/Warrior2;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function5;)Lcom/pyamsoft/highlander/Warrior3;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function6;)Lcom/pyamsoft/highlander/Warrior4;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function7;)Lcom/pyamsoft/highlander/Warrior5;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function8;)Lcom/pyamsoft/highlander/Warrior6;
+	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function9;)Lcom/pyamsoft/highlander/Warrior7;
+	public static final fun highlander (Lkotlin/jvm/functions/Function10;)Lcom/pyamsoft/highlander/Warrior8;
+	public static final fun highlander (Lkotlin/jvm/functions/Function11;)Lcom/pyamsoft/highlander/Warrior9;
+	public static final fun highlander (Lkotlin/jvm/functions/Function2;)Lcom/pyamsoft/highlander/Warrior;
+	public static final fun highlander (Lkotlin/jvm/functions/Function3;)Lcom/pyamsoft/highlander/Warrior1;
+	public static final fun highlander (Lkotlin/jvm/functions/Function4;)Lcom/pyamsoft/highlander/Warrior2;
+	public static final fun highlander (Lkotlin/jvm/functions/Function5;)Lcom/pyamsoft/highlander/Warrior3;
+	public static final fun highlander (Lkotlin/jvm/functions/Function6;)Lcom/pyamsoft/highlander/Warrior4;
+	public static final fun highlander (Lkotlin/jvm/functions/Function7;)Lcom/pyamsoft/highlander/Warrior5;
+	public static final fun highlander (Lkotlin/jvm/functions/Function8;)Lcom/pyamsoft/highlander/Warrior6;
+	public static final fun highlander (Lkotlin/jvm/functions/Function9;)Lcom/pyamsoft/highlander/Warrior7;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function10;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior8;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function11;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior9;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior1;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function4;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior2;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function5;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior3;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function6;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior4;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function7;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior5;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function8;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior6;
+	public static synthetic fun highlander$default (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function9;ILjava/lang/Object;)Lcom/pyamsoft/highlander/Warrior7;
+}
+
+public final class com/pyamsoft/highlander/HighlanderDefaults {
+	public static final field INSTANCE Lcom/pyamsoft/highlander/HighlanderDefaults;
+	public static field LOGGING_ENABLED Z
+	public final fun getDEFAULT_COROUTINE_CONTEXT ()Lkotlin/coroutines/CoroutineContext;
+	public final fun setDEFAULT_COROUTINE_CONTEXT (Lkotlin/coroutines/CoroutineContext;)V
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior {
+	public abstract fun call (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior1 {
+	public abstract fun call (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior2 {
+	public abstract fun call (Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior3 {
+	public abstract fun call (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior4 {
+	public abstract fun call (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior5 {
+	public abstract fun call (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior6 {
+	public abstract fun call (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior7 {
+	public abstract fun call (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior8 {
+	public abstract fun call (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/pyamsoft/highlander/Warrior9 {
+	public abstract fun call (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
