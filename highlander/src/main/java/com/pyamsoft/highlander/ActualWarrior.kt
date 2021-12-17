@@ -17,6 +17,7 @@
 package com.pyamsoft.highlander
 
 import androidx.annotation.CheckResult
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -33,8 +34,8 @@ public interface ActualWarrior<R> {
     /** Create a new ActualWarrior */
     @CheckResult
     @PublishedApi
-    internal fun <R> create(debugTag: String): ActualWarrior<R> {
-      return Connor(debugTag)
+    internal fun <R> create(context: CoroutineContext, debugTag: String): ActualWarrior<R> {
+      return Connor(context, debugTag)
     }
   }
 }

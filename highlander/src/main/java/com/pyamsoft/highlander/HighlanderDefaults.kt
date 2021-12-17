@@ -19,9 +19,15 @@
 
 package com.pyamsoft.highlander
 
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+
 /** Global configuration object */
 public object HighlanderDefaults {
 
   /** Is logging globally enabled */
   @JvmField public var LOGGING_ENABLED: Boolean = false
+
+  /** The global default coroutine context for Highlander operations */
+  public var DEFAULT_COROUTINE_CONTEXT: CoroutineContext = EmptyCoroutineContext
 }
