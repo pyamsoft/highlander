@@ -22,7 +22,7 @@ import androidx.annotation.CheckResult
  * Function wrapper which guarantees only a single running function call at a time using 0
  * parameters
  */
-public interface Warrior<R> {
+public interface Warrior<R> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult public suspend fun call(): R
@@ -31,7 +31,7 @@ public interface Warrior<R> {
 /**
  * Function wrapper which guarantees only a single running function call at a time using 1 parameter
  */
-public interface Warrior1<R, T1> {
+public interface Warrior1<R, T1> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult public suspend fun call(p1: T1): R
@@ -41,7 +41,7 @@ public interface Warrior1<R, T1> {
  * Function wrapper which guarantees only a single running function call at a time using 2
  * parameters
  */
-public interface Warrior2<R, T1, T2> {
+public interface Warrior2<R, T1, T2> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult public suspend fun call(p1: T1, p2: T2): R
@@ -51,7 +51,7 @@ public interface Warrior2<R, T1, T2> {
  * Function wrapper which guarantees only a single running function call at a time using 3
  * parameters
  */
-public interface Warrior3<R, T1, T2, T3> {
+public interface Warrior3<R, T1, T2, T3> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult public suspend fun call(p1: T1, p2: T2, p3: T3): R
@@ -61,7 +61,7 @@ public interface Warrior3<R, T1, T2, T3> {
  * Function wrapper which guarantees only a single running function call at a time using 4
  * parameters
  */
-public interface Warrior4<R, T1, T2, T3, T4> {
+public interface Warrior4<R, T1, T2, T3, T4> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult public suspend fun call(p1: T1, p2: T2, p3: T3, p4: T4): R
@@ -71,7 +71,7 @@ public interface Warrior4<R, T1, T2, T3, T4> {
  * Function wrapper which guarantees only a single running function call at a time using 5
  * parameters
  */
-public interface Warrior5<R, T1, T2, T3, T4, T5> {
+public interface Warrior5<R, T1, T2, T3, T4, T5> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult public suspend fun call(p1: T1, p2: T2, p3: T3, p4: T4, p5: T5): R
@@ -82,7 +82,7 @@ public interface Warrior5<R, T1, T2, T3, T4, T5> {
  * parameters
  */
 @Deprecated("You probably shouldn't be making functions with over 5 parameters.")
-public interface Warrior6<R, T1, T2, T3, T4, T5, T6> {
+public interface Warrior6<R, T1, T2, T3, T4, T5, T6> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult
@@ -101,7 +101,7 @@ public interface Warrior6<R, T1, T2, T3, T4, T5, T6> {
  * parameters
  */
 @Deprecated("You probably shouldn't be making functions with over 5 parameters.")
-public interface Warrior7<R, T1, T2, T3, T4, T5, T6, T7> {
+public interface Warrior7<R, T1, T2, T3, T4, T5, T6, T7> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult
@@ -121,7 +121,7 @@ public interface Warrior7<R, T1, T2, T3, T4, T5, T6, T7> {
  * parameters
  */
 @Deprecated("You probably shouldn't be making functions with over 5 parameters.")
-public interface Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
+public interface Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult
@@ -142,7 +142,7 @@ public interface Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
  * parameters
  */
 @Deprecated("You probably shouldn't be making functions with over 5 parameters.")
-public interface Warrior9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
+public interface Warrior9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> : Swordsman {
 
   /** Run a function and guarantee it is only running a single time */
   @CheckResult

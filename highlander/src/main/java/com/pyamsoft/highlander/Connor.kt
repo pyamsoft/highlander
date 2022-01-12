@@ -133,6 +133,22 @@ internal constructor(
         }
       }
 
+  /** Cancel an in-progress function call outside of the normal warrior flow */
+  override suspend fun cancel() =
+      withContext(context = NonCancellable) {
+        // Run in the NonCancellable context because the mutex must be claimed to free the
+        // activeTask or else we will leak memory.
+        logger.log { "Explicitly cancelling warrior call" }
+
+        // Run in the passed context
+        withContext(context = context) {
+          coroutineScope {
+            logger.log { "Directly cancel existing task" }
+            cancelExistingTask()
+          }
+        }
+      }
+
   /** Runner is a keyed Deferred task */
   private data class Runner<T>(
       val id: String,

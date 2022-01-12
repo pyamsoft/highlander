@@ -22,6 +22,32 @@ package com.pyamsoft.highlander
 import androidx.annotation.CheckResult
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
+
+/** Base class for a Swordsman object */
+@PublishedApi
+internal abstract class BaseSwordsman<R>
+protected constructor(
+    private val context: CoroutineContext,
+    debugTag: String,
+) : Swordsman {
+
+  @PublishedApi internal val warrior: ActualWarrior<R> = ActualWarrior.create(context, debugTag)
+
+  final override suspend fun cancel() =
+      withContext(context = NonCancellable) {
+        // Maybe we can simplify this with a withContext(context = NonCancellable +
+        // context)
+        // but I don't know enough about Coroutines right now to figure out if that works
+        // or if plussing the contexts will remove NonCancel, so here we go instead.
+        withContext(context = context) {
+          // Coroutine scope here to make sure if anything throws an error we catch it in
+          // the scope
+          warrior.cancel()
+        }
+      }
+}
 
 /** Wrapper which will generate a Warrior object that delegates its call() to the upstream source */
 @CheckResult
@@ -31,9 +57,7 @@ public inline fun <R> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.() -> R
 ): Warrior<R> {
-  return object : Warrior<R> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object : BaseSwordsman<R>(context, debugTag), Warrior<R> {
 
     override suspend fun call(): R {
       return warrior.call { upstream() }
@@ -49,9 +73,7 @@ public inline fun <R, T1> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.(T1) -> R
 ): Warrior1<R, T1> {
-  return object : Warrior1<R, T1> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object : BaseSwordsman<R>(context, debugTag), Warrior1<R, T1> {
 
     override suspend fun call(p1: T1): R {
       return warrior.call { upstream(p1) }
@@ -67,9 +89,7 @@ public inline fun <R, T1, T2> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.(T1, T2) -> R
 ): Warrior2<R, T1, T2> {
-  return object : Warrior2<R, T1, T2> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object : BaseSwordsman<R>(context, debugTag), Warrior2<R, T1, T2> {
 
     override suspend fun call(p1: T1, p2: T2): R {
       return warrior.call { upstream(p1, p2) }
@@ -85,9 +105,7 @@ public inline fun <R, T1, T2, T3> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.(T1, T2, T3) -> R
 ): Warrior3<R, T1, T2, T3> {
-  return object : Warrior3<R, T1, T2, T3> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object : BaseSwordsman<R>(context, debugTag), Warrior3<R, T1, T2, T3> {
 
     override suspend fun call(p1: T1, p2: T2, p3: T3): R {
       return warrior.call { upstream(p1, p2, p3) }
@@ -103,9 +121,7 @@ public inline fun <R, T1, T2, T3, T4> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4) -> R
 ): Warrior4<R, T1, T2, T3, T4> {
-  return object : Warrior4<R, T1, T2, T3, T4> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object : BaseSwordsman<R>(context, debugTag), Warrior4<R, T1, T2, T3, T4> {
 
     override suspend fun call(p1: T1, p2: T2, p3: T3, p4: T4): R {
       return warrior.call { upstream(p1, p2, p3, p4) }
@@ -121,9 +137,7 @@ public inline fun <R, T1, T2, T3, T4, T5> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5) -> R
 ): Warrior5<R, T1, T2, T3, T4, T5> {
-  return object : Warrior5<R, T1, T2, T3, T4, T5> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object : BaseSwordsman<R>(context, debugTag), Warrior5<R, T1, T2, T3, T4, T5> {
 
     override suspend fun call(p1: T1, p2: T2, p3: T3, p4: T4, p5: T5): R {
       return warrior.call { upstream(p1, p2, p3, p4, p5) }
@@ -140,9 +154,7 @@ public inline fun <R, T1, T2, T3, T4, T5, T6> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6) -> R
 ): Warrior6<R, T1, T2, T3, T4, T5, T6> {
-  return object : Warrior6<R, T1, T2, T3, T4, T5, T6> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object : BaseSwordsman<R>(context, debugTag), Warrior6<R, T1, T2, T3, T4, T5, T6> {
 
     override suspend fun call(
         p1: T1,
@@ -175,9 +187,7 @@ public inline fun <R, T1, T2, T3, T4, T5, T6, T7> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7) -> R
 ): Warrior7<R, T1, T2, T3, T4, T5, T6, T7> {
-  return object : Warrior7<R, T1, T2, T3, T4, T5, T6, T7> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object : BaseSwordsman<R>(context, debugTag), Warrior7<R, T1, T2, T3, T4, T5, T6, T7> {
 
     override suspend fun call(
         p1: T1,
@@ -212,9 +222,7 @@ public inline fun <R, T1, T2, T3, T4, T5, T6, T7, T8> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8) -> R
 ): Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
-  return object : Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object : BaseSwordsman<R>(context, debugTag), Warrior8<R, T1, T2, T3, T4, T5, T6, T7, T8> {
 
     override suspend fun call(
         p1: T1,
@@ -251,9 +259,8 @@ public inline fun <R, T1, T2, T3, T4, T5, T6, T7, T8, T9> highlander(
     debugTag: String = "",
     crossinline upstream: suspend CoroutineScope.(T1, T2, T3, T4, T5, T6, T7, T8, T9) -> R
 ): Warrior9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
-  return object : Warrior9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
-
-    private val warrior = ActualWarrior.create<R>(context, debugTag)
+  return object :
+      BaseSwordsman<R>(context, debugTag), Warrior9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
 
     override suspend fun call(
         p1: T1,

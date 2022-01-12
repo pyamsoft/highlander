@@ -17,25 +17,10 @@
 package com.pyamsoft.highlander
 
 import androidx.annotation.CheckResult
-import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.CoroutineScope
 
-/**
- * Internal
- *
- * Runs an upstream function only after guaranteeing that all previous upstreams are cancelled.
- */
-public interface ActualWarrior<R> : Swordsman {
+/** Allows for the cancellation of Warrior function calls outside of the normal flow */
+public interface Swordsman {
 
-  /** The main entry point for the Warrior */
-  @CheckResult public suspend fun call(upstream: suspend CoroutineScope.() -> R): R
-
-  public companion object {
-    /** Create a new ActualWarrior */
-    @CheckResult
-    @PublishedApi
-    internal fun <R> create(context: CoroutineContext, debugTag: String): ActualWarrior<R> {
-      return Connor(context, debugTag)
-    }
-  }
+  /** Cancel a running function */
+  @CheckResult public suspend fun cancel()
 }
