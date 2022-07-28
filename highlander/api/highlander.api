@@ -10,6 +10,7 @@ public final class com/pyamsoft/highlander/ActualWarrior$Companion {
 public abstract class com/pyamsoft/highlander/BaseSwordsman : com/pyamsoft/highlander/Swordsman {
 	protected fun <init> (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;)V
 	public final fun cancel (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getWarrior ()Lcom/pyamsoft/highlander/ActualWarrior;
 }
 
 public final class com/pyamsoft/highlander/Highlander {
