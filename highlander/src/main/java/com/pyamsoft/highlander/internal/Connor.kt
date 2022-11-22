@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Peter Kenji Yamanaka
+ * Copyright 2022 Peter Kenji Yamanaka
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.highlander
+package com.pyamsoft.highlander.internal
 
 import androidx.annotation.CheckResult
+import com.pyamsoft.highlander.Swordsman
 import java.util.UUID
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.CoroutineStart.LAZY
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
@@ -35,16 +36,15 @@ import kotlinx.coroutines.withContext
  *
  * Runs an upstream function only after guaranteeing that all previous upstreams are cancelled.
  */
+@PublishedApi
 internal class Connor<R>
 internal constructor(
     private val context: CoroutineContext,
-    debugTag: String,
-) : ActualWarrior<R> {
+    private val logger: Logger,
+) : Swordsman {
 
-  private val logger: Logger = Logger(debugTag)
   private val mutex: Mutex = Mutex()
 
-  // Must be locked with mutex
   private var activeRunner: Runner<R>? = null
 
   /**
@@ -54,7 +54,7 @@ internal constructor(
    */
   private suspend fun cancelActiveTaskWhenLocked() {
     activeRunner?.also { runner ->
-      logger.log { "Attempt to cancel existing: $runner" }
+      logger.log { "Attempt to cancel existing: ${runner.id}" }
 
       logger.log { "Cancelling task: ${runner.id}" }
       runner.task.cancelAndJoin()
@@ -85,25 +85,34 @@ internal constructor(
         cancelActiveTaskWhenLocked()
 
         return@withLock Runner(
-                task = scope.async(start = CoroutineStart.LAZY) { block() },
+                // Start the Deferred as Lazy so that it will not start
+                // until we explicitly start() it
+                task =
+                    scope.async(
+                        context = context,
+                        start = LAZY,
+                    ) {
+                      block()
+                    },
             )
             .also { runner ->
               activeRunner = runner
-              logger.log { "Marking runner as active: $runner" }
+              logger.log { "Marking runner as active: ${runner.id}" }
             }
       }
 
   /** Await the completion of the task */
   @CheckResult
-  private suspend fun runTask(runner: Runner<R>): R {
-    logger.log { "Running task ${runner.id}" }
+  private suspend fun runTask(runner: Runner<R>): R =
+      withContext(context = context) {
+        logger.log { "Running task ${runner.id}" }
 
-    // Must call explicit start because this is a LAZY coroutine
-    runner.task.start()
+        // Must call explicit start because this is a LAZY coroutine
+        runner.task.start()
 
-    logger.log { "Awaiting task ${runner.id}" }
-    return runner.task.await().also { logger.log { "Completed task ${runner.id}" } }
-  }
+        logger.log { "Awaiting task ${runner.id}" }
+        return@withContext runner.task.await().also { logger.log { "Completed task ${runner.id}" } }
+      }
 
   /**
    * Make sure the activeTask is actually us, otherwise we don't need to do anything Fast path in
@@ -132,7 +141,7 @@ internal constructor(
       }
 
   /** The main entry point for the Warrior */
-  override suspend fun call(upstream: suspend CoroutineScope.() -> R): R =
+  suspend fun call(upstream: suspend CoroutineScope.() -> R): R =
       withContext(context = context) {
         logger.log { "Running call for warrior" }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Peter Kenji Yamanaka
+ * Copyright 2022 Peter Kenji Yamanaka
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.highlander
+package com.pyamsoft.highlander.internal
 
 import android.util.Log
+import com.pyamsoft.highlander.HighlanderDefaults
 
 /** Logger */
 internal class Logger internal constructor(private val debugTag: String) {
