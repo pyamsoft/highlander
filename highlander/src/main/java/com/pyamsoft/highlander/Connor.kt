@@ -44,13 +44,22 @@ internal constructor(
   private val logger: Logger = Logger(debugTag)
   private val mutex: Mutex = Mutex()
 
+  // Must be locked with mutex
   private var activeRunner: Runner<R>? = null
 
-  /** Cancel a task and log the id */
-  private suspend fun cancelTask(id: String, task: Deferred<R>) {
-    logger.log { "Cancelling previous active task: $id" }
-    task.cancelAndJoin()
-    logger.log { "Previously active task cancelled: $id" }
+  /**
+   * MUST CALL FROM INSIDE mutex.withLock {}
+   *
+   * Cancels the activeRunner if it is populated
+   */
+  private suspend fun cancelActiveTaskWhenLocked() {
+    activeRunner?.also { runner ->
+      logger.log { "Attempt to cancel existing: $runner" }
+
+      logger.log { "Cancelling task: ${runner.id}" }
+      runner.task.cancelAndJoin()
+      logger.log { "Task cancel complete: ${runner.id}" }
+    }
   }
 
   /**
@@ -59,8 +68,7 @@ internal constructor(
    */
   private suspend fun cancelExistingTask(): Unit =
       mutex.withLock {
-        logger.log { "Checking for active task" }
-        activeRunner?.also { cancelTask(it.id, it.task) }
+        cancelActiveTaskWhenLocked()
 
         // Unset the active runner once we have cancelled any held task
         activeRunner = null
@@ -74,42 +82,49 @@ internal constructor(
   ): Runner<R> =
       mutex.withLock {
         // In case anything has taken the active runner in between
-        activeRunner?.also { cancelTask(it.id, it.task) }
+        cancelActiveTaskWhenLocked()
 
-        val currentId = randomId()
-        val newTask = scope.async(start = CoroutineStart.LAZY) { block() }
-        val newRunner = Runner(currentId, newTask)
-        activeRunner = newRunner
-        logger.log { "Marking task as active: $currentId" }
-        return@withLock newRunner
+        return@withLock Runner(
+                task = scope.async(start = CoroutineStart.LAZY) { block() },
+            )
+            .also { runner ->
+              activeRunner = runner
+              logger.log { "Marking runner as active: $runner" }
+            }
       }
 
   /** Await the completion of the task */
   @CheckResult
   private suspend fun runTask(runner: Runner<R>): R {
-    logger.log { "Awaiting task ${runner.id}" }
+    logger.log { "Running task ${runner.id}" }
 
     // Must call explicit start because this is a LAZY coroutine
     runner.task.start()
 
-    val result = runner.task.await()
-    logger.log { "Completed task ${runner.id}" }
-    return result
+    logger.log { "Awaiting task ${runner.id}" }
+    return runner.task.await().also { logger.log { "Completed task ${runner.id}" } }
   }
 
   /**
    * Make sure the activeTask is actually us, otherwise we don't need to do anything Fast path in
    * this case only since we have the id to guard with as well as the state of activeTask
    */
-  private suspend fun clearActiveTask(runner: Runner<R>) =
+  private suspend fun releaseActiveTask(runner: Runner<R>) =
       withContext(context = NonCancellable) {
         // Run in the NonCancellable context because the mutex must be claimed to free the
         // activeTask or else we will leak memory.
-        if (activeRunner?.id == runner.id) {
+        val initialRunner = activeRunner
+        if (initialRunner?.id == runner.id) {
+          logger.log { "ActiveRunner outside lock is current, clearing! ${runner.id}" }
           mutex.withLock {
             // Check again to make sure we really are the active task
-            if (activeRunner?.id == runner.id) {
-              logger.log { "Releasing activeTask ${runner.id} since it is complete" }
+            val lockedRunner = activeRunner
+            if (lockedRunner?.id == runner.id) {
+              logger.log { "Releasing ActiveRunner ${runner.id} since it is complete" }
+
+              // Since this is called as finally, we don't need to cancel the task here.
+              // It is either cancelled already or it is completed.
+              // Just null out the field for memory.
               activeRunner = null
             }
           }
@@ -123,18 +138,39 @@ internal constructor(
 
         // Coroutine scope here to make sure if anything throws an error we catch it in the scope
         return@withContext coroutineScope {
+
+          // Locks mutex
           cancelExistingTask()
+
+          // Locks mutex
           val runner = createNewTask(this, upstream)
           return@coroutineScope try {
             runTask(runner)
           } finally {
-            clearActiveTask(runner)
+
+            // Potentially locks mutex
+            //
+            // If something like this happens
+            // call() --> creates task T1
+            //    -- creates new task T1
+            //    -- runs new task T1
+            //    -- waits a long ass time for T1
+            // call() --> creates task T2
+            //    -- cancels T1
+            //    -- depending on yield behavior:
+            //    --   T1 may run finally block first and free itself
+            //    --   T2 may enter create, which sets it as active
+            //    -- upon T2 finally call, if it is the active task, it is freed
+            //    -- otherwise T1 is freed when it claims the active task depending on yield
+            releaseActiveTask(runner)
           }
         }
       }
 
   /** Cancel an in-progress function call outside of the normal warrior flow */
   override suspend fun cancel() =
+      // NOTE(Peter): Can we can withContext(NonCancellable + context) for the same effect?
+      //              I want this to not be cancellable and run on the thread context passed in
       withContext(context = NonCancellable) {
         // Run in the NonCancellable context because the mutex must be claimed to free the
         // activeTask or else we will leak memory.
@@ -144,6 +180,8 @@ internal constructor(
         withContext(context = context) {
           coroutineScope {
             logger.log { "Directly cancel existing task" }
+
+            // Locks mutex
             cancelExistingTask()
           }
         }
@@ -151,8 +189,8 @@ internal constructor(
 
   /** Runner is a keyed Deferred task */
   private data class Runner<T>(
-      val id: String,
       val task: Deferred<T>,
+      val id: String = randomId(),
   )
 
   companion object {
