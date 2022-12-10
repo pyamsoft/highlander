@@ -1,18 +1,3 @@
-public abstract interface class com/pyamsoft/highlander/ActualWarrior : com/pyamsoft/highlander/Swordsman {
-	public static final field Companion Lcom/pyamsoft/highlander/ActualWarrior$Companion;
-	public abstract fun call (Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class com/pyamsoft/highlander/ActualWarrior$Companion {
-	public final fun create (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;)Lcom/pyamsoft/highlander/ActualWarrior;
-}
-
-public abstract class com/pyamsoft/highlander/BaseSwordsman : com/pyamsoft/highlander/Swordsman {
-	protected fun <init> (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;)V
-	public final fun cancel (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun getWarrior ()Lcom/pyamsoft/highlander/ActualWarrior;
-}
-
 public final class com/pyamsoft/highlander/Highlander {
 	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lcom/pyamsoft/highlander/Warrior;
 	public static final fun highlander (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;Lkotlin/jvm/functions/Function3;)Lcom/pyamsoft/highlander/Warrior1;
@@ -72,5 +57,19 @@ public abstract interface class com/pyamsoft/highlander/Warrior4 : com/pyamsoft/
 
 public abstract interface class com/pyamsoft/highlander/Warrior5 : com/pyamsoft/highlander/Swordsman {
 	public abstract fun call (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract class com/pyamsoft/highlander/internal/BaseSwordsman : com/pyamsoft/highlander/Swordsman {
+	protected fun <init> (Lkotlin/coroutines/CoroutineContext;Ljava/lang/String;)V
+	public final fun cancel (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/pyamsoft/highlander/internal/Connor : com/pyamsoft/highlander/Swordsman {
+	public static final field Companion Lcom/pyamsoft/highlander/internal/Connor$Companion;
+	public final fun call (Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun cancel (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/pyamsoft/highlander/internal/Connor$Companion {
 }
 
