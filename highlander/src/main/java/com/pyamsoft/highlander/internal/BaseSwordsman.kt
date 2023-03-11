@@ -17,9 +17,9 @@
 package com.pyamsoft.highlander.internal
 
 import com.pyamsoft.highlander.Swordsman
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.CoroutineContext
 
 /** Base class for a Swordsman object */
 @PublishedApi
@@ -37,14 +37,14 @@ protected constructor(
 
   final override suspend fun cancel() =
       withContext(context = NonCancellable) {
-          // Maybe we can simplify this with a withContext(context = NonCancellable +
-          // context)
-          // but I don't know enough about Coroutines right now to figure out if that works
-          // or if plussing the contexts will remove NonCancel, so here we go instead.
-          withContext(context = context) {
-              // Coroutine scope here to make sure if anything throws an error we catch it in
-              // the scope
-              warrior.cancel()
-          }
+        // Maybe we can simplify this with a withContext(context = NonCancellable +
+        // context)
+        // but I don't know enough about Coroutines right now to figure out if that works
+        // or if plussing the contexts will remove NonCancel, so here we go instead.
+        withContext(context = context) {
+          // Coroutine scope here to make sure if anything throws an error we catch it in
+          // the scope
+          warrior.cancel()
+        }
       }
 }
