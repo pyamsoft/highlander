@@ -24,8 +24,8 @@ android {
 
 dependencies {
   // AndroidX Annotations
-  implementation "androidx.annotation:annotation:$annotation"
+  implementation("androidx.annotation:annotation:$annotation")
 
   // Coroutines
-  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
 }
