@@ -47,30 +47,18 @@ plugins {
 }
 
 subprojects {
-  // Android AGP
   apply plugin: "com.android.library"
-
-  // AGP Cache Fix
   apply plugin: "org.gradle.android.cache-fix"
-
-  // Kotlin
   apply plugin: "kotlin-android"
-
-  // Dokka
   apply plugin: "org.jetbrains.dokka"
-
-  // Maven Publish
   apply plugin: "maven-publish"
 
-  final String POM_GROUP = "com.github.pyamsoft"
-  final String POM_VERSION = "0.2.1"
-
   android {
-    compileSdkVersion = 33
+    compileSdkVersion(33)
 
     //noinspection GroovyMissingReturnStatement
     defaultConfig {
-      minSdkVersion = 22
+      minSdkVersion(22)
 
       // For vector drawables
       vectorDrawables.useSupportLibrary = true
@@ -82,8 +70,8 @@ subprojects {
       resConfigs("en")
 
       compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
       }
 
       kotlinOptions {
@@ -140,8 +128,8 @@ subprojects {
       publications {
         Highlander(MavenPublication) {
           artifactId = project.name
-          groupId = POM_GROUP
-          version = POM_VERSION
+          groupId = "com.github.pyamsoft"
+          version = "0.2.1"
 
           afterEvaluate {
             from project.components.release
