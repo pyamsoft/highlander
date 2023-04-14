@@ -127,13 +127,11 @@ subprojects {
     publishing {
       publications {
         Highlander(MavenPublication) {
+          from project.components.release
+
           artifactId = project.name
           groupId = "com.github.pyamsoft"
           version = "0.2.1"
-
-          afterEvaluate {
-            from project.components.release
-          }
         }
       }
     }
