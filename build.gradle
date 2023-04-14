@@ -34,7 +34,7 @@ buildscript {
 plugins {
   // Android AGP
   // https://developer.android.com/studio/build#top-level
-  id 'com.android.library' version '8.0.0' apply false
+  id "com.android.library" version "8.0.0" apply false
 
   // Fix Android build cache
   // https://github.com/gradle/android-cache-fix-gradle-plugin
@@ -42,15 +42,15 @@ plugins {
 
   // Kotlin
   // https://developer.android.com/studio/build#top-level
-  id 'org.jetbrains.kotlin.android' version "1.8.20" apply false
+  id "org.jetbrains.kotlin.android" version "1.8.20" apply false
 
   // Dokka
   // https://github.com/Kotlin/dokka
-  id 'org.jetbrains.dokka' version "1.8.10" apply false
+  id "org.jetbrains.dokka" version "1.8.10" apply false
 
   // Gradle version checker
   // https://github.com/ben-manes/gradle-versions-plugin
-  id 'com.github.ben-manes.versions' version '0.46.0' apply false
+  id "com.github.ben-manes.versions" version "0.46.0" apply false
 
   // Spotless
   // https://github.com/diffplug/spotless
@@ -58,24 +58,24 @@ plugins {
 
   // Validate the public API
   // https://github.com/Kotlin/binary-compatibility-validator
-  id 'org.jetbrains.kotlinx.binary-compatibility-validator' version '0.13.0'
+  id "org.jetbrains.kotlinx.binary-compatibility-validator" version "0.13.0"
 }
 
 subprojects {
   // Android AGP
-  apply plugin: 'com.android.library'
+  apply plugin: "com.android.library"
 
   // AGP Cache Fix
   apply plugin: "org.gradle.android.cache-fix"
 
   // Kotlin
-  apply plugin: 'kotlin-android'
+  apply plugin: "kotlin-android"
 
   // Dokka
-  apply plugin: 'org.jetbrains.dokka'
+  apply plugin: "org.jetbrains.dokka"
 
   // Maven Publish
-  apply plugin: 'maven-publish'
+  apply plugin: "maven-publish"
 
   final String POM_GROUP = "com.github.pyamsoft"
   final String POM_VERSION = "0.2.1"
@@ -93,7 +93,7 @@ subprojects {
       // Consumer proguard file
       consumerProguardFiles "proguard-rules.pro"
 
-      // Only English, I don't have any translations
+      // Only English, I don"t have any translations
       resConfigs "en"
 
       compileOptions {
@@ -149,14 +149,14 @@ subprojects {
 
   project.afterEvaluate {
     task androidSourcesJar(type: Jar) {
-      archiveClassifier.convention('sources')
-      archiveClassifier.set('sources')
+      archiveClassifier.convention("sources")
+      archiveClassifier.set("sources")
       from android.sourceSets.main.java.source
     }
 
     task androidJavadocsJar(type: Jar, dependsOn: dokkaJavadoc) {
-      archiveClassifier.convention('javadoc')
-      archiveClassifier.set('javadoc')
+      archiveClassifier.convention("javadoc")
+      archiveClassifier.set("javadoc")
       from "$buildDir/dokka"
     }
 
@@ -182,7 +182,7 @@ subprojects {
 }
 
 allprojects {
-  apply plugin: 'com.github.ben-manes.versions'
+  apply plugin: "com.github.ben-manes.versions"
   apply plugin: "com.diffplug.spotless"
 
   repositories {
@@ -193,7 +193,7 @@ allprojects {
 
   // Java compile
   tasks.withType(JavaCompile) {
-    options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     options.deprecation = true
   }
 
@@ -227,7 +227,7 @@ allprojects {
 
   // Version Plugin ignore non-stable releases
   def isNonStable = { String version ->
-    def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { version.toUpperCase().contains(it) }
+    def stableKeyword = ["RELEASE", "FINAL", "GA"].any { version.toUpperCase().contains(it) }
     def regex = /^[0-9,.v-]+(-r)?$/
     return !stableKeyword && !(version ==~ regex)
   }
