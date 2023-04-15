@@ -17,9 +17,7 @@
 android {
   namespace = "com.pyamsoft.highlander"
 
-  kotlinOptions {
-    freeCompilerArgs += "-Xexplicit-api=strict"
-  }
+  kotlinOptions { freeCompilerArgs += "-Xexplicit-api=strict" }
 }
 
 dependencies {

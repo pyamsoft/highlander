@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 pluginManagement {
   repositories {
     gradlePluginPortal()
@@ -24,4 +23,5 @@ pluginManagement {
 }
 
 rootProject.name = "Highlander"
+
 include(":highlander")
