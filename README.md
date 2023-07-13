@@ -1,5 +1,16 @@
 # Highlander
 
+## DEPRECATED
+Instead of this library, you should assign a job to a variable and cancel it yourself.
+```kotlin
+var job: Job? = null
+
+fun doSomething() {
+  job?.cancel()
+  job = scope.launch { /* ... */ }
+}
+```
+
 There can be only one.
 
 A coroutine powered runner which guarantees that the only one instance of a
